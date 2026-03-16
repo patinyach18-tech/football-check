@@ -11,6 +11,13 @@
 
 <button onclick="resetAll()">🔄 รีเซ็ตรายชื่อทั้งหมด</button>
 
+<br><br>
+
+<input id="price" placeholder="ใส่ราคาสนาม">
+<button onclick="calculate()">คำนวณ</button>
+
+<h3 id="perperson"></h3>
+
 <h3>รายชื่อ</h3>
 
 <ul id="list" style="list-style:none;padding:0;"></ul>
@@ -35,6 +42,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+let totalPlayers = 0
+
 onValue(ref(db,"players"),(snapshot)=>{
 
 let data = snapshot.val()
@@ -44,6 +53,7 @@ list.innerHTML=""
 
 if(!data){
 document.getElementById("count").innerText="จำนวนคน: 0"
+totalPlayers = 0
 return
 }
 
@@ -58,6 +68,8 @@ total++
 
 }
 
+totalPlayers = total
+
 document.getElementById("count").innerText="จำนวนคน: "+total
 
 })
@@ -71,6 +83,19 @@ remove(ref(db,"players/"+id))
 window.resetAll = function(){
 
 remove(ref(db,"players"))
+
+}
+
+window.calculate = function(){
+
+let price = document.getElementById("price").value
+
+if(totalPlayers==0) return
+
+let per = price / totalPlayers
+
+document.getElementById("perperson").innerText =
+"คนละ: " + per + " บาท"
 
 }
 
