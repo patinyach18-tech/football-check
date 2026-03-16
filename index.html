@@ -17,7 +17,8 @@
 <button onclick="resetAll()">🔄 Reset รายชื่อ</button>
 
 <h3>รายชื่อ</h3>
-<ul id="list"></ul>
+
+<ul id="list" style="list-style:none;padding:0;"></ul>
 
 <h3 id="count">จำนวนคน: 0</h3>
 
@@ -54,14 +55,14 @@ document.getElementById("name").value=""
 
 }
 
-// reset all names
+// reset all
 window.resetAll = function(){
 
 remove(ref(db,"players"))
 
 }
 
-// show players
+// show names
 onValue(ref(db,"players"),(snapshot)=>{
 
 let data = snapshot.val()
@@ -78,7 +79,7 @@ let total = 0
 
 for(let id in data){
 
-list.innerHTML += "<li>"+data[id].name+
+list.innerHTML += "<li>• "+data[id].name+
 " <button onclick='del(\""+id+"\")'>❌</button></li>"
 
 total++
@@ -90,7 +91,7 @@ document.getElementById("count").innerText =
 
 })
 
-// delete one name
+// delete name
 window.del = function(id){
 
 remove(ref(db,"players/"+id))
