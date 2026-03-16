@@ -9,7 +9,7 @@
 
 <h1>หลังบ้าน ⚙️</h1>
 
-<button onclick="resetAll()">🔄 รีเซ็ตรายชื่อ</button>
+<button onclick="resetAll()">🔄 รีเซ็ตรายชื่อทั้งหมด</button>
 
 <h3>รายชื่อ</h3>
 
@@ -23,13 +23,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "YOUR_DATABASE_URL",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
+  apiKey: "AIzaSyA_w_L3xkpnNxEB0igvOpeS1E47dX2dEVQ",
+  authDomain: "football-check.firebaseapp.com",
+  databaseURL: "https://football-check-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "football-check",
+  storageBucket: "football-check.firebasestorage.app",
+  messagingSenderId: "167610978480",
+  appId: "1:167610978480:web:7bbd96092f8edf20e16b75"
 };
 
 const app = initializeApp(firebaseConfig);
