@@ -12,6 +12,10 @@
 <input id="name" placeholder="พิมพ์ชื่อ">
 <button onclick="save()">Save</button>
 
+<br><br>
+
+<button onclick="resetAll()">🔄 Reset รายชื่อ</button>
+
 <h3>รายชื่อ</h3>
 <ul id="list"></ul>
 
@@ -20,7 +24,7 @@
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA_w_L3xkpnNxEB0igvOpeS1E47dX2dEVQ",
@@ -35,6 +39,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// save name
 window.save = function(){
 
 let name = document.getElementById("name").value
@@ -49,6 +54,14 @@ document.getElementById("name").value=""
 
 }
 
+// reset all names
+window.resetAll = function(){
+
+remove(ref(db,"players"))
+
+}
+
+// show players
 onValue(ref(db,"players"),(snapshot)=>{
 
 let data = snapshot.val()
@@ -65,7 +78,9 @@ let total = 0
 
 for(let id in data){
 
-list.innerHTML += "<li>"+data[id].name+"</li>"
+list.innerHTML += "<li>"+data[id].name+
+" <button onclick='del(\""+id+"\")'>❌</button></li>"
+
 total++
 
 }
@@ -74,6 +89,13 @@ document.getElementById("count").innerText =
 "จำนวนคน: " + total
 
 })
+
+// delete one name
+window.del = function(id){
+
+remove(ref(db,"players/"+id))
+
+}
 
 </script>
 
