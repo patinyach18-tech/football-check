@@ -1,20 +1,27 @@
-<script type="module">
+<!DOCTYPE html>
+<html>
+<head>
+<title>เช็คชื่อเตะบอล</title>
+</head>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+<body style="text-align:center;font-family:sans-serif">
 
-const firebaseConfig = {
-  apiKey: "AIzaSyA_w_L3xkpnNxEB0igvOpeS1E47dX2dEVQ",
-  authDomain: "football-check.firebaseapp.com",
-  databaseURL: "https://football-check-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "football-check",
-  storageBucket: "football-check.firebasestorage.app",
-  messagingSenderId: "167610978480",
-  appId: "1:167610978480:web:7bbd96092f8edf20e16b75"
-};
+<h1>เช็คชื่อเตะบอล ⚽</h1>
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+<h3 id="price"></h3>
+
+<input id="name" placeholder="พิมพ์ชื่อ">
+<button onclick="add()">เข้าร่วม</button>
+
+<h3>รายชื่อ</h3>
+<ul id="list"></ul>
+
+<p id="count"></p>
+<p id="per"></p>
+
+<script>
+
+let players = []
 
 const url = new URLSearchParams(window.location.search)
 let price = url.get("price")
@@ -22,47 +29,29 @@ let price = url.get("price")
 document.getElementById("price").innerText =
 "ราคาสนามทั้งหมด: " + price + " บาท"
 
-window.add = function(){
+function add(){
 
 let name = document.getElementById("name").value
 
 if(name=="") return
 
-push(ref(db,"players"),{
-name:name
-})
+players.push(name)
 
-document.getElementById("name").value=""
-
-}
-
-onValue(ref(db,"players"),(snapshot)=>{
-
-let data = snapshot.val()
-
-if(!data) return
-
-let list=document.getElementById("list")
-list.innerHTML=""
-
-let players=[]
-
-for(let id in data){
-
-players.push(data[id].name)
-
-list.innerHTML+="<li>"+data[id].name+"</li>"
-
-}
+document.getElementById("list").innerHTML += "<li>"+name+"</li>"
 
 document.getElementById("count").innerText =
-"จำนวนคน: "+players.length
+"จำนวนคน: " + players.length
 
-let per=Math.ceil(price/players.length)
+let per = Math.ceil(price / players.length)
 
 document.getElementById("per").innerText =
-"หารคนละ: "+per+" บาท"
+"หารคนละ: " + per + " บาท"
 
-})
+document.getElementById("name").value = ""
+
+}
 
 </script>
+
+</body>
+</html>
