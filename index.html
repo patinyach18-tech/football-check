@@ -9,28 +9,59 @@
 <h1>เช็คชื่อเตะบอล ⚽</h1>
 
 <input id="name" placeholder="พิมพ์ชื่อ">
-<button onclick="add()">เข้าร่วม</button>
+<button onclick="save()">Save</button>
 
 <h3>รายชื่อ</h3>
 <ul id="list"></ul>
 
-<script>
+<script type="module">
 
-let players = []
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-function add(){
+const firebaseConfig = {
+  apiKey: "AIzaSyA_w_L3xkpnNxEB0igvOpeS1E47dX2dEVQ",
+  authDomain: "football-check.firebaseapp.com",
+  databaseURL: "https://football-check-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "football-check",
+  storageBucket: "football-check.firebasestorage.app",
+  messagingSenderId: "167610978480",
+  appId: "1:167610978480:web:7bbd96092f8edf20e16b75"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.save = function(){
 
 let name = document.getElementById("name").value
 
 if(name=="") return
 
-players.push(name)
-
-document.getElementById("list").innerHTML += "<li>"+name+"</li>"
+push(ref(db,"players"),{
+name:name
+})
 
 document.getElementById("name").value=""
 
 }
+
+onValue(ref(db,"players"),(snapshot)=>{
+
+let data = snapshot.val()
+
+let list = document.getElementById("list")
+list.innerHTML=""
+
+if(!data) return
+
+for(let id in data){
+
+list.innerHTML += "<li>"+data[id].name+"</li>"
+
+}
+
+})
 
 </script>
 
