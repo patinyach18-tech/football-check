@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>เช็คชื่อเตะบอล</title>
+
+<style>
+body{
+font-family:Arial;
+text-align:center;
+}
+input{
+padding:8px;
+margin:5px;
+}
+button{
+padding:8px 15px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>เช็คชื่อเตะบอล ⚽</h1>
+
+<div id="setPrice">
+
+<p>ใส่ราคาสนาม</p>
+<input id="priceInput" placeholder="เช่น 2000">
+<button onclick="setPrice()">ยืนยัน</button>
+
+</div>
+
+<p id="total"></p>
+
+<input id="name" placeholder="พิมพ์ชื่อ">
+<button onclick="add()">เข้าร่วม</button>
+
+<h3>รายชื่อ</h3>
+<ul id="list"></ul>
+
+<p id="count"></p>
+<p id="perperson"></p>
+
+<script>
+
+let players = []
+let totalPrice = 0
+
+function setPrice(){
+
+totalPrice = document.getElementById("priceInput").value
+
+document.getElementById("total").innerText =
+"ราคาสนามทั้งหมด: " + totalPrice + " บาท"
+
+document.getElementById("setPrice").style.display = "none"
+
+}
+
+function add(){
+
+let name = document.getElementById("name").value
+
+if(name == "") return
+
+players.push(name)
+
+document.getElementById("list").innerHTML += "<li>"+name+"</li>"
+
+document.getElementById("count").innerText =
+"จำนวนคน: " + players.length
+
+let per = totalPrice / players.length
+
+document.getElementById("perperson").innerText =
+"ต้องจ่ายคนละ: " + per.toFixed(2) + " บาท"
+
+document.getElementById("name").value = ""
+
+}
+
+</script>
+
+</body>
+</html>
