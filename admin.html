@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>หลังบ้านเช็คชื่อ</title>
+<title>หลังบ้าน</title>
 </head>
 
 <body style="text-align:center;font-family:sans-serif">
@@ -16,7 +16,7 @@
 <input id="price" placeholder="ใส่ราคาสนาม">
 <button onclick="calculate()">คำนวณ</button>
 
-<h3 id="perperson"></h3>
+<h3 id="result"></h3>
 
 <h3>รายชื่อ</h3>
 
@@ -94,7 +94,7 @@ if(totalPlayers==0) return
 
 let per = price / totalPlayers
 
-document.getElementById("perperson").innerText =
+document.getElementById("result").innerText =
 "คนละ: " + per + " บาท"
 
 }
