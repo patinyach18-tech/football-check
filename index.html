@@ -10,22 +10,14 @@
 <h1>เช็คชื่อเตะบอล ⚽</h1>
 
 <input id="name" placeholder="พิมพ์ชื่อ">
-<button onclick="save()">Save</button>
+<button onclick="send()">ส่ง</button>
 
-<br><br>
-
-<button onclick="resetAll()">🔄 Reset รายชื่อ</button>
-
-<h3>รายชื่อ</h3>
-
-<ul id="list" style="list-style:none;padding:0;"></ul>
-
-<h3 id="count">จำนวนคน: 0</h3>
+<p id="msg"></p>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA_w_L3xkpnNxEB0igvOpeS1E47dX2dEVQ",
@@ -40,8 +32,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// save name
-window.save = function(){
+window.send = function(){
 
 let name = document.getElementById("name").value
 
@@ -52,49 +43,7 @@ name:name
 })
 
 document.getElementById("name").value=""
-
-}
-
-// reset all
-window.resetAll = function(){
-
-remove(ref(db,"players"))
-
-}
-
-// show names
-onValue(ref(db,"players"),(snapshot)=>{
-
-let data = snapshot.val()
-
-let list = document.getElementById("list")
-list.innerHTML=""
-
-if(!data){
-document.getElementById("count").innerText="จำนวนคน: 0"
-return
-}
-
-let total = 0
-
-for(let id in data){
-
-list.innerHTML += "<li>• "+data[id].name+
-" <button onclick='del(\""+id+"\")'>❌</button></li>"
-
-total++
-
-}
-
-document.getElementById("count").innerText =
-"จำนวนคน: " + total
-
-})
-
-// delete name
-window.del = function(id){
-
-remove(ref(db,"players/"+id))
+document.getElementById("msg").innerText="ส่งชื่อแล้ว ✅"
 
 }
 
