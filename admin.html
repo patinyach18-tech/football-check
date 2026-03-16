@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>หลังบ้านเช็คชื่อ</title>
+</head>
+
+<body style="text-align:center;font-family:sans-serif">
+
+<h1>หลังบ้าน ⚙️</h1>
+
+<button onclick="resetAll()">🔄 รีเซ็ตรายชื่อ</button>
+
+<h3>รายชื่อ</h3>
+
+<ul id="list" style="list-style:none;padding:0;"></ul>
+
+<h3 id="count">จำนวนคน: 0</h3>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "YOUR_DATABASE_URL",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+onValue(ref(db,"players"),(snapshot)=>{
+
+let data = snapshot.val()
+
+let list = document.getElementById("list")
+list.innerHTML=""
+
+if(!data){
+document.getElementById("count").innerText="จำนวนคน: 0"
+return
+}
+
+let total = 0
+
+for(let id in data){
+
+list.innerHTML += "<li>• "+data[id].name+
+" <button onclick='del(\""+id+"\")'>❌</button></li>"
+
+total++
+
+}
+
+document.getElementById("count").innerText="จำนวนคน: "+total
+
+})
+
+window.del = function(id){
+
+remove(ref(db,"players/"+id))
+
+}
+
+window.resetAll = function(){
+
+remove(ref(db,"players"))
+
+}
+
+</script>
+
+</body>
+</html>
