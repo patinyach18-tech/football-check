@@ -3,70 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <title>เช็คชื่อเตะบอล</title>
-
-<style>
-body{
-font-family: Arial, sans-serif;
-text-align:center;
-margin-top:50px;
-}
-
-input{
-padding:10px;
-font-size:16px;
-}
-
-button{
-padding:10px 20px;
-font-size:16px;
-cursor:pointer;
-}
-</style>
-
 </head>
 
-<body>
+<body style="text-align:center;font-family:sans-serif">
 
 <h1>เช็คชื่อเตะบอล ⚽</h1>
 
 <input id="name" placeholder="พิมพ์ชื่อ">
-<button onclick="sendName()">ส่ง</button>
+<button onclick="send()">ส่ง</button>
 
-<p id="status"></p>
+<p id="msg"></p>
 
-<h2>จำนวนคนทั้งหมด</h2>
+<h3>จำนวนคนตอนนี้</h3>
 <h1 id="count">0</h1>
 
-<script>
+<script type="module">
 
-let names = JSON.parse(localStorage.getItem("players")) || [];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-function updateCount(){
-document.getElementById("count").innerText = names.length;
+const firebaseConfig = {
+  apiKey: "AIzaSyA_w_L3xkpnNxEB0igvOpeS1E47dX2dEVQ",
+  authDomain: "football-check.firebaseapp.com",
+  databaseURL: "https://football-check-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "football-check",
+  storageBucket: "football-check.firebasestorage.app",
+  messagingSenderId: "167610978480",
+  appId: "1:167610978480:web:7bbd96092f8edf20e16b75"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ส่งชื่อ
+window.send = function(){
+
+let name = document.getElementById("name").value
+
+if(name=="") return
+
+push(ref(db,"players"),{
+name:name
+})
+
+document.getElementById("name").value=""
+document.getElementById("msg").innerText="ส่งชื่อแล้ว ✅"
+
 }
 
-function sendName(){
+// นับจำนวนคน
+onValue(ref(db,"players"),(snapshot)=>{
 
-let name = document.getElementById("name").value.trim();
+let data = snapshot.val()
 
-if(name === ""){
-alert("กรุณาพิมพ์ชื่อก่อน");
-return;
+if(!data){
+document.getElementById("count").innerText="0"
+return
 }
 
-names.push(name);
+let total = Object.keys(data).length
 
-localStorage.setItem("players", JSON.stringify(names));
+document.getElementById("count").innerText = total
 
-document.getElementById("status").innerText = "ส่งชื่อแล้ว ✅";
-
-document.getElementById("name").value = "";
-
-updateCount();
-
-}
-
-updateCount();
+})
 
 </script>
 
