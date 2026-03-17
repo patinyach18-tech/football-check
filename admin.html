@@ -1,20 +1,30 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
-<title>หลังบ้าน</title>
+<title>หลังบ้านเตะบอล</title>
 </head>
 
 <body style="font-family:sans-serif">
 
-<h1>รายชื่อคนเตะบอล</h1>
+<h1>รายชื่อคนเตะบอล ⚽</h1>
+
+<h2>จำนวนคน: <span id="count">0</span></h2>
 
 <ul id="list"></ul>
+
+<h2>ราคาสนาม</h2>
+<input id="price" placeholder="ใส่ราคาสนาม">
+<button onclick="calculate()">คำนวณ</button>
+
+<h2>ราคาต่อคน</h2>
+<h1 id="per">0</h1>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA_w_L3xkpnNxEB0igvOpeS1E47dX2dEVQ",
@@ -29,6 +39,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+let total = 0
+
 onValue(ref(db,"players"),(snapshot)=>{
 
 let data = snapshot.val()
@@ -37,17 +49,42 @@ let list = document.getElementById("list")
 
 list.innerHTML=""
 
+total = 0
+
 for(let id in data){
+
+total++
 
 let li = document.createElement("li")
 
-li.innerText = data[id].name
+li.innerHTML = data[id].name + 
+' <button onclick="del(\''+id+'\')">ลบ</button>'
 
 list.appendChild(li)
 
 }
 
+document.getElementById("count").innerText = total
+
 })
+
+window.del = function(id){
+
+remove(ref(db,"players/"+id))
+
+}
+
+window.calculate = function(){
+
+let price = document.getElementById("price").value
+
+if(total==0) return
+
+let per = price / total
+
+document.getElementById("per").innerText = per
+
+}
 
 </script>
 
