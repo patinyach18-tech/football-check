@@ -14,10 +14,12 @@
 
 <p id="msg"></p>
 
+<h3 id="count">จำนวนคนตอนนี้: 0</h3>
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA_w_L3xkpnNxEB0igvOpeS1E47dX2dEVQ",
@@ -32,6 +34,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// ส่งชื่อ
 window.send = function(){
 
 let name = document.getElementById("name").value
@@ -46,6 +49,23 @@ document.getElementById("name").value=""
 document.getElementById("msg").innerText="ส่งชื่อแล้ว ✅"
 
 }
+
+// นับจำนวนคน
+onValue(ref(db,"players"),(snapshot)=>{
+
+let data = snapshot.val()
+
+if(!data){
+document.getElementById("count").innerText="จำนวนคนตอนนี้: 0"
+return
+}
+
+let total = Object.keys(data).length
+
+document.getElementById("count").innerText =
+"จำนวนคนตอนนี้: " + total
+
+})
 
 </script>
 
