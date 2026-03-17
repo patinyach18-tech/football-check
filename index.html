@@ -3,9 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <title>เช็คชื่อเตะบอล</title>
+
+<style>
+body{
+font-family: Arial, sans-serif;
+text-align:center;
+margin-top:50px;
+}
+
+input{
+padding:10px;
+font-size:16px;
+}
+
+button{
+padding:10px 20px;
+font-size:16px;
+cursor:pointer;
+}
+</style>
+
 </head>
 
-<body style="text-align:center;font-family:sans-serif;">
+<body>
 
 <h1>เช็คชื่อเตะบอล ⚽</h1>
 
@@ -19,34 +39,34 @@
 
 <script>
 
-let names = JSON.parse(localStorage.getItem("players")) || []
+let names = JSON.parse(localStorage.getItem("players")) || [];
 
 function updateCount(){
-document.getElementById("count").innerText = names.length
+document.getElementById("count").innerText = names.length;
 }
 
 function sendName(){
 
-let name = document.getElementById("name").value.trim()
+let name = document.getElementById("name").value.trim();
 
 if(name === ""){
-alert("กรุณาพิมพ์ชื่อก่อน")
-return
+alert("กรุณาพิมพ์ชื่อก่อน");
+return;
 }
 
-names.push(name)
+names.push(name);
 
-localStorage.setItem("players", JSON.stringify(names))
+localStorage.setItem("players", JSON.stringify(names));
 
-document.getElementById("status").innerText = "ส่งชื่อแล้ว ✅"
+document.getElementById("status").innerText = "ส่งชื่อแล้ว ✅";
 
-document.getElementById("name").value=""
+document.getElementById("name").value = "";
 
-updateCount()
+updateCount();
 
 }
 
-updateCount()
+updateCount();
 
 </script>
 
