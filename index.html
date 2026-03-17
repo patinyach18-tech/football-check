@@ -3,67 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <title>เช็คชื่อเตะบอล</title>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
 </head>
 
-<body style="text-align:center;font-family:sans-serif">
+<body style="text-align:center;font-family:sans-serif;">
 
 <h1>เช็คชื่อเตะบอล ⚽</h1>
 
 <input id="name" placeholder="พิมพ์ชื่อ">
-<button onclick="send()">ส่ง</button>
+<button onclick="sendName()">ส่ง</button>
 
-<p id="msg"></p>
+<h2>จำนวนคนทั้งหมด</h2>
+<h1 id="count">0</h1>
 
-<h3 id="count">จำนวนคนตอนนี้: 0</h3>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+<script>
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA_w_L3xkpnNxEB0igvOpeS1E47dX2dEVQ",
-  authDomain: "football-check.firebaseapp.com",
-  databaseURL: "https://football-check-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "football-check",
-  storageBucket: "football-check.firebasestorage.app",
-  messagingSenderId: "167610978480",
-  appId: "1:167610978480:web:7bbd96092f8edf20e16b75"
-};
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+}
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+firebase.initializeApp(firebaseConfig)
 
-// ส่งชื่อ
-window.send = function(){
+const db = firebase.database().ref("players")
+
+function sendName(){
 
 let name = document.getElementById("name").value
 
-if(name=="") return
-
-push(ref(db,"players"),{
-name:name
-})
-
-document.getElementById("name").value=""
-document.getElementById("msg").innerText="ส่งชื่อแล้ว ✅"
-
-}
-
-// นับจำนวนคน
-onValue(ref(db,"players"),(snapshot)=>{
-
-let data = snapshot.val()
-
-if(!data){
-document.getElementById("count").innerText="จำนวนคนตอนนี้: 0"
+if(name===""){
+alert("พิมพ์ชื่อก่อน")
 return
 }
 
-let total = Object.keys(data).length
+db.push({
+name:name
+})
 
-document.getElementById("count").innerText =
-"จำนวนคนตอนนี้: " + total
+}
+
+db.on("value",(snapshot)=>{
+
+let data = snapshot.val()
+
+let count = data ? Object.keys(data).length : 0
+
+document.getElementById("count").innerText = count
 
 })
 
