@@ -5,29 +5,16 @@
 <title>หลังบ้าน</title>
 </head>
 
-<body style="text-align:center;font-family:sans-serif">
+<body style="font-family:sans-serif">
 
-<h1>หลังบ้าน ⚙️</h1>
+<h1>รายชื่อคนเตะบอล</h1>
 
-<button onclick="resetAll()">🔄 รีเซ็ตรายชื่อทั้งหมด</button>
-
-<br><br>
-
-<input id="price" placeholder="ใส่ราคาสนาม">
-<button onclick="calculate()">คำนวณ</button>
-
-<h3 id="result"></h3>
-
-<h3>รายชื่อ</h3>
-
-<ul id="list" style="list-style:none;padding:0;"></ul>
-
-<h3 id="count">จำนวนคน: 0</h3>
+<ul id="list"></ul>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA_w_L3xkpnNxEB0igvOpeS1E47dX2dEVQ",
@@ -42,62 +29,25 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let totalPlayers = 0
-
 onValue(ref(db,"players"),(snapshot)=>{
 
 let data = snapshot.val()
 
 let list = document.getElementById("list")
+
 list.innerHTML=""
-
-if(!data){
-document.getElementById("count").innerText="จำนวนคน: 0"
-totalPlayers = 0
-return
-}
-
-let total = 0
 
 for(let id in data){
 
-list.innerHTML += "<li>• "+data[id].name+
-" <button onclick='del(\""+id+"\")'>❌</button></li>"
+let li = document.createElement("li")
 
-total++
+li.innerText = data[id].name
+
+list.appendChild(li)
 
 }
-
-totalPlayers = total
-
-document.getElementById("count").innerText="จำนวนคน: "+total
 
 })
-
-window.del = function(id){
-
-remove(ref(db,"players/"+id))
-
-}
-
-window.resetAll = function(){
-
-remove(ref(db,"players"))
-
-}
-
-window.calculate = function(){
-
-let price = document.getElementById("price").value
-
-if(totalPlayers==0) return
-
-let per = price / totalPlayers
-
-document.getElementById("result").innerText =
-"คนละ: " + per + " บาท"
-
-}
 
 </script>
 
