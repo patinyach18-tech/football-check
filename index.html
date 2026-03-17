@@ -3,10 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>เช็คชื่อเตะบอล</title>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 </head>
 
 <body style="text-align:center;font-family:sans-serif;">
@@ -16,46 +12,41 @@
 <input id="name" placeholder="พิมพ์ชื่อ">
 <button onclick="sendName()">ส่ง</button>
 
+<p id="status"></p>
+
 <h2>จำนวนคนทั้งหมด</h2>
 <h1 id="count">0</h1>
 
 <script>
 
-const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT",
+let names = JSON.parse(localStorage.getItem("players")) || []
+
+function updateCount(){
+document.getElementById("count").innerText = names.length
 }
-
-firebase.initializeApp(firebaseConfig)
-
-const db = firebase.database().ref("players")
 
 function sendName(){
 
-let name = document.getElementById("name").value
+let name = document.getElementById("name").value.trim()
 
-if(name===""){
-alert("พิมพ์ชื่อก่อน")
+if(name === ""){
+alert("กรุณาพิมพ์ชื่อก่อน")
 return
 }
 
-db.push({
-name:name
-})
+names.push(name)
+
+localStorage.setItem("players", JSON.stringify(names))
+
+document.getElementById("status").innerText = "ส่งชื่อแล้ว ✅"
+
+document.getElementById("name").value=""
+
+updateCount()
 
 }
 
-db.on("value",(snapshot)=>{
-
-let data = snapshot.val()
-
-let count = data ? Object.keys(data).length : 0
-
-document.getElementById("count").innerText = count
-
-})
+updateCount()
 
 </script>
 
